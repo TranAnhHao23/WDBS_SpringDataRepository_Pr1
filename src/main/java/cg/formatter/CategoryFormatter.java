@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 public class CategoryFormatter implements Formatter<Category> {
-    private final ICategoryService iCategoryService;
+    private ICategoryService iCategoryService;
 
     @Autowired
     public CategoryFormatter(ICategoryService iCategoryService){
