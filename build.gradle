@@ -40,7 +40,9 @@ dependencies {
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.27'
 
-    //jpa
+    //upload-file
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+
     // https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa
     implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.6.1'
 }
