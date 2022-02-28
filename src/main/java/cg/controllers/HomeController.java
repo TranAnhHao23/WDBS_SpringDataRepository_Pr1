@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/home")
@@ -111,35 +112,29 @@ public class HomeController {
     }
 
     @PostMapping("/update")
-    public ModelAndView viewDetail12(@ModelAttribute Product product) {
-        ModelAndView modelAndView = new ModelAndView("detail");
-        modelAndView.addObject("view", view);
+    public ModelAndView updateProduct(@RequestParam("id") Long id, @ModelAttribute Product product) {
+        ModelAndView modelAndView = new ModelAndView("edit");
+        if (product.getImageFile().getOriginalFilename().equals("")) {
+            product.setImageFile(productService.findById(id).getImageFile());
+            product.setImageLink(productService.findById(id).getImageLink());
+        } else {
+            MultipartFile multipartFile = product.getImageFile();
+            String fileName = multipartFile.getOriginalFilename();
+            try {
+                FileCopyUtils.copy(product.getImageFile().getBytes(), new File(fileUpload + fileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            product.setImageLink(fileName);
+        }
+        productService.save(product);
+        Iterable<Category> categories = categoryService.findAll();
+        modelAndView.addObject("categories", categories);
         modelAndView.addObject("product", product);
+        modelAndView.addObject("view",view);
+        modelAndView.addObject("message", "Update Product Successfully !!!");
         return modelAndView;
     }
-
-//    @PostMapping("/update")
-//    public ModelAndView updateProduct(@ModelAttribute Product product) {
-////        ModelAndView modelAndView = new ModelAndView("edit");
-//////        if (product.getImageFile().getOriginalFilename().equals("")) {
-//////            product.setImageLink(productService.findById(id).getImageLink());
-////////        product.setImageFile(productService.findById(id).getImageFile());
-//////        } else {
-////            MultipartFile multipartFile = product.getImageFile();
-////            String fileName = multipartFile.getOriginalFilename();
-////            try {
-////                FileCopyUtils.copy(product.getImageFile().getBytes(), new File(fileUpload + fileName));
-////            } catch (IOException e) {
-////                e.printStackTrace();
-////            }
-////            product.setImageLink(fileName);
-//////        }
-////        productService.save(product);
-////        Iterable<Category> categories = categoryService.findAll();
-////        modelAndView.addObject("categories", categories);
-////        modelAndView.addObject("message", "Update Product Successfully !!!");
-////        return modelAndView;
-//    }
 
     @PostMapping("/searchByName")
     public ModelAndView searchByName(@RequestParam("searchByName") String name, @PageableDefault(value = 5) Pageable pageable) {

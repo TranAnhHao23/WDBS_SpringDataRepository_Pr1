@@ -78,7 +78,7 @@
                         <td>
                             <label>
                                 <select th:field="*{category}"/>
-                                <option th:each="c : ${categories}" th:value="${c.c_name}" th:selected="${c.c_id} == *{category.c_id}">
+                                <option th:each="c : ${categories}" th:value="${c.c_id}" th:selected="${c.c_id} == *{category.c_id}">
                                     <span th:text="${c.c_name}"></span>
                                 </option>
                                 </select>
